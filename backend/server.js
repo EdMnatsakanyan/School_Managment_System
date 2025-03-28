@@ -8,8 +8,8 @@ const cors = require('cors')
 
 app.use(
   cors({
-    origin: "*", // Разрешает запросы с любых доменов
-    credentials: false, // Отключаем передачу cookies и заголовков авторизации (иначе нельзя использовать "*")
+    origin: "*",
+    credentials: false,
     allowedHeaders: ["Content-Type", "Authorization"],
     methods: ["GET", "POST", "OPTIONS"],
   })

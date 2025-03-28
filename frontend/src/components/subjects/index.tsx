@@ -77,7 +77,6 @@ export default function Subjects() {
         ))}
       </Box>
 
-      {/* Delete Confirmation Dialog */}
       <Dialog open={isDeleteOpen} onClose={() => setIsDeleteOpen(false)}>
         <DialogTitle>Are you sure?</DialogTitle>
         <DialogContent>

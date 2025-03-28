@@ -14,6 +14,19 @@ const teacherService = {
         if (!teacher) throw new Error("No teacher with that ID");
         return teacher;
     },
+    search: async (string) => {
+        return await prisma.Teacher.findMany({
+            where: {
+                OR: [
+                    {name: {contains: string}},
+                    {surname: {contains: string}}
+                ]
+            },
+            include: {
+                subjects: true
+            }
+        })
+    },
     create: async (teacher) => {
         return await prisma.Teacher.create({
             data: teacher,

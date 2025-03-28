@@ -18,6 +18,13 @@ const teacherResolver = {
             } catch (err) {
                 throw new Error(err.message || 'Something went wrong');
             }
+        },
+        searchTeacher: async(_, {string}) => {
+            try {
+                return await teacherService.search(string)
+            } catch(err) {
+                throw new Error(err.message || 'Something went wrong');
+            }
         }
     },
     Mutation: {

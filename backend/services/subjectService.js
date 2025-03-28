@@ -26,6 +26,9 @@ const subjectService = {
     });
     if (!findedTeacher) throw new Error("No teacher with that id");
 
+    const finded = await prisma.Subject.findFirst({where: {title: subject.title}})
+    if(finded) throw new Error('This subject alreay exists !')
+
     const newSubject = await prisma.Subject.create({
       data: subject,
       include: {

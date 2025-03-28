@@ -20,6 +20,20 @@ const pupilService = {
         return finded
     },
 
+    search: async (string) => {
+        return await prisma.Pupil.findMany({
+            where: {
+                OR: [
+                    {name: {contains: string}},
+                    {surname: {contains: string}}
+                ]
+            },
+            include: {
+                class: true
+            }
+        })
+    },
+
     create: async (pupil) => {
         const findedClass = await prisma.Class.findUnique({where: {id: Number(pupil.class_id)}})
         if(!findedClass){

@@ -9,6 +9,7 @@ const pupilScheme = `
     type Query {
         pupils: [Pupil]
         pupil(id: ID!): Pupil
+        searchPupil(string: String!): [Pupil]
     }
 
     type Mutation {

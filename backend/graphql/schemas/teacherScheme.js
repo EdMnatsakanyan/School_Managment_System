@@ -9,6 +9,7 @@ const teacherScheme = `
   type Query {
     teachers: [Teacher]
     teacher(id: ID!): Teacher
+    searchTeacher(string: String!): [Teacher]!
   }
 
   type Mutation {
@@ -26,6 +27,8 @@ const teacherScheme = `
     name: String
     surname: String
   }
+
+
 `;
 
 module.exports = teacherScheme;

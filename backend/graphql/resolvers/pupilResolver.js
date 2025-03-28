@@ -17,6 +17,14 @@ const pupilResolver = {
                 throw new Error(err.message || 'Something went wrong');
             }
         },
+
+        searchPupil: async(_, {string}) => {
+            try {
+                return await pupilService.search(string)
+            } catch(err) {
+                throw new Error(err.message || 'Something went wrong');
+            }
+        }
     },
 
     Mutation: {

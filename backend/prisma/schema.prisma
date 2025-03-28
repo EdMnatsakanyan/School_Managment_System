@@ -1,0 +1,50 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Teacher {
+  id Int @id @default(autoincrement())
+  name String 
+  surname String
+  subjects Subject[]
+}
+
+model Subject {
+  id Int @id @default(autoincrement())
+  title String
+  teacher_id Int
+  teacher Teacher @relation( fields: [teacher_id], references: [id], onDelete: Cascade )
+  schedules Schedule[]
+}
+
+model Class {
+  id Int @id @default(autoincrement())
+  room_number Int
+  level Int 
+  letter String
+  pupils Pupil[]
+  schedules Schedule[]
+}
+
+model Pupil {
+  id Int @id @default(autoincrement())
+  name String
+  surname String
+  class_id Int
+  class Class @relation( fields: [class_id], references: [id], onDelete: Cascade )
+}
+
+model Schedule {
+  id Int @id @default(autoincrement())
+  day String
+  number Int
+  class_id Int
+  subject_id Int
+  class Class @relation( fields: [class_id], references: [id], onDelete: Cascade )
+  subject Subject @relation( fields: [subject_id], references: [id], onDelete: Cascade )
+}

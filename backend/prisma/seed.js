@@ -3,7 +3,6 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
 async function main() {
-  // Создаем учителей
   const teachers = await Promise.all([
     prisma.teacher.create({
       data: {
@@ -49,7 +48,7 @@ async function main() {
     }),
   ]);
 
-  // Создаем предметы
+  
   const subjects = await Promise.all([
     prisma.subject.create({
       data: {
@@ -107,7 +106,7 @@ async function main() {
     }),
   ]);
 
-  // Создаем классы
+
   const classes = await Promise.all([
     prisma.class.create({
       data: {
@@ -139,7 +138,7 @@ async function main() {
     }),
   ]);
 
-  // Создаем учеников
+
   const pupils = await Promise.all([
     prisma.pupil.create({
       data: {
@@ -199,65 +198,65 @@ async function main() {
     }),
   ]);
 
-  // Создаем расписания
+
   await prisma.schedule.createMany({
     data: [
       {
-        day: "Monday",
+        day: "monday",
         number: 1,
         class_id: classes[0].id,
         subject_id: subjects[0].id,
       },
       {
-        day: "Monday",
+        day: "monday",
         number: 2,
         class_id: classes[0].id,
         subject_id: subjects[1].id,
       },
       {
-        day: "Tuesday",
+        day: "tuesday",
         number: 1,
         class_id: classes[1].id,
         subject_id: subjects[2].id,
       },
       {
-        day: "Tuesday",
+        day: "tuesday",
         number: 2,
         class_id: classes[1].id,
         subject_id: subjects[3].id,
       },
       {
-        day: "Wednesday",
+        day: "wednesday",
         number: 1,
         class_id: classes[2].id,
         subject_id: subjects[4].id,
       },
       {
-        day: "Wednesday",
+        day: "wednesday",
         number: 2,
         class_id: classes[2].id,
         subject_id: subjects[5].id,
       },
       {
-        day: "Thursday",
+        day: "thursday",
         number: 1,
         class_id: classes[3].id,
         subject_id: subjects[6].id,
       },
       {
-        day: "Thursday",
+        day: "thursday",
         number: 2,
         class_id: classes[3].id,
         subject_id: subjects[7].id,
       },
       {
-        day: "Friday",
+        day: "friday",
         number: 1,
         class_id: classes[0].id,
         subject_id: subjects[8].id,
       },
       {
-        day: "Friday",
+        day: "friday",
         number: 2,
         class_id: classes[0].id,
         subject_id: subjects[3].id,

@@ -72,3 +72,17 @@ export const ADD_SUBJECT = gql`
         }
     }
 `
+
+export const SEARCH_TEACHERS = gql `
+    query searchTeahcers($string: String!) {
+        searchTeacher(string: $string) {
+            id
+            name
+            surname
+            subjects {
+                id
+                title
+            }
+        }
+    }
+`

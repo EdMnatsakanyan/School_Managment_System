@@ -1,6 +1,6 @@
-import { useLazyQuery, useQuery } from "@apollo/client";
-import { GET_PUPILS } from "./queries";
-import { useEffect, useState } from "react";
+import { useLazyQuery } from "@apollo/client";
+import { SEARCH_PUPILS } from "./queries";
+import { useEffect, useRef, useState } from "react";
 import { IClass, IPupil } from "../../types";
 import { GET_CLASSES } from "../classes/queries";
 import { useNavigate } from "react-router-dom";
@@ -17,6 +17,7 @@ import {
   Divider,
   Button,
   SelectChangeEvent,
+  TextField,
 } from "@mui/material";
 import { styled } from "@mui/system";
 import AddPupilModal from "./addPupilModal";
@@ -37,12 +38,14 @@ const StyledSelect = styled(Select)(({ theme }) => ({
 }));
 
 export default function Pupils() {
-  const { loading: pupilsLoading, data, refetch } = useQuery(GET_PUPILS);  // Используем refetch
+  const [searchInput, setSearchInput] = useState<string>("");
+    const [searchPupils, { loading, refetch }] = useLazyQuery(SEARCH_PUPILS);
   const [getClasses, { loading: classesLoading }] = useLazyQuery(GET_CLASSES);
   const [pupils, setPupils] = useState<IPupil[] | null>(null);
   const [classes, setClasses] = useState<IClass[] | null>(null);
   const [filteredPupils, setFilteredPupils] = useState<IPupil[] | null>(null);
   const navigate = useNavigate();
+  const t = useRef<number | null>(null)
 
   const [isOpen, setIsOpen] = useState<boolean>(false)
 
@@ -50,12 +53,25 @@ export default function Pupils() {
     getClasses()
       .then((data) => setClasses(data.data.classes))
       .catch((err) => console.log(err));
+  }, []);
 
-    if (data) {
-      setPupils(data.pupils);
-      setFilteredPupils(data.pupils);
-    }
-  }, [data]);
+  useEffect(() => {
+    if(t.current)  clearTimeout(t.current!)
+
+    t.current = setTimeout(() => {
+      searchPupils({
+        variables: {
+          string: searchInput
+        }
+      })
+      .then((res) => {
+        setPupils(res.data.searchPupil)
+        setFilteredPupils(res.data.searchPupil)
+      })
+    }, 600)
+
+    return () => clearTimeout(t.current!)
+  }, [searchInput])
 
   const handleChange = (e: SelectChangeEvent<unknown>) => {
     if (!e.target.value) {
@@ -63,11 +79,11 @@ export default function Pupils() {
         return
     }
     setFilteredPupils(
-      (pupils?.filter((p) => p.class.id == e.target.value)!) || []
+      (pupils?.filter((p) => p.class.id == e.target.value)) || []
     );
   };
 
-  if (pupilsLoading || classesLoading) {
+  if (loading || classesLoading) {
     return (
       <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh">
         <CircularProgress />
@@ -75,7 +91,11 @@ export default function Pupils() {
     );
   }
 
-  if (!filteredPupils) return <>Loading...</>;
+  if (!filteredPupils) return (
+    <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh">
+      <CircularProgress />
+    </Box>
+  );
 
   return (
     <>
@@ -84,8 +104,19 @@ export default function Pupils() {
           Pupils List
         </Typography>
 
+        <Box display="flex" justifyContent="center" mb={2}>
+                <TextField
+                  label="Search Teachers"
+                  variant="outlined"
+                  fullWidth
+                  value={searchInput}
+                  onChange={(e) => setSearchInput(e.target.value)}
+                  sx={{ maxWidth: 400 }}
+                />
+        </Box>
+
       <Button 
-        sx={{width: '200px'}}
+        sx={{width: '230px'}}
         variant="outlined"
         fullWidth
         color="primary"
@@ -119,10 +150,10 @@ export default function Pupils() {
         </FormControl>
       </Box>
 
-      <Box width={'35%'} display={'flexbox'} alignItems={'center'} paddingLeft={'32.5%'}>
+      <Box width={'44%'} display={'flexbox'} alignItems={'center'} paddingLeft={'28%'}>
         {filteredPupils.map((pupil) => (
-          <StyledCard key={pupil.id} >
-            <CardContent>
+          <StyledCard key={pupil.id}>
+            <CardContent >
               <Typography variant="h6" fontWeight="bold" color="primary">
                 {pupil.name} {pupil.surname}
               </Typography>

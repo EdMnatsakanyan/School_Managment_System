@@ -74,7 +74,7 @@ export default function Classes() {
       <AddClassModal isOpen={isOpen} setIsOpen={setIsOpen} refetch={refetch} />
 
       <Stack spacing={2}>
-        {classes?.map((c) => (
+        {classes?.slice().sort((a, b) => Number(a.level) - Number(b.level)).map((c) => (
           <Card
             key={c.id}
             sx={{

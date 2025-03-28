@@ -60,3 +60,18 @@ export const DELETE_PUPIL = gql`
         deletePupil(id: $id)
     }
 `
+
+export const SEARCH_PUPILS = gql `
+    query searchPupils($string: String!) {
+        searchPupil(string: $string) {
+            id
+            name
+            surname
+            class {
+                id
+                level
+                letter
+            }
+        }
+    }
+`
